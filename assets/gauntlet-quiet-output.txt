@@ -1,0 +1,136 @@
+Iris Gauntlet  windows=3 levels=['tiny_text', 'color_dots', 'decoys', 'multi_window', 'overlap', 'whack', 'template', 'marks'] seed=7 harness=win32 click_method=auto
+  IRIS_GAUNTLET_A hwnd=186058998 at 720x520+24+90
+  IRIS_GAUNTLET_B hwnd=24908154 at 720x520+768+90
+  IRIS_GAUNTLET_C hwnd=65868070 at 720x520+1512+90
+
+== tiny_text
+  hit                A Arm                                ocr            0.5px    486ms 
+  hit                A Load                               ocr            0.7px    398ms 
+  hit                A Open                               ocr            1.6px    331ms 
+  hit                A Mute                               ocr            0.5px    280ms 
+  hit                A Solo                               ocr            0.7px    304ms 
+  hit                A Layer                              ocr            2.5px    310ms 
+  hit                A Sync                               ocr            2.0px    304ms 
+  hit                A Deck                               ocr            0.5px    347ms 
+
+== color_dots
+  hit                A color:#ff3b30                      pixel          0.0px    150ms 
+  hit                A color:#34c759                      pixel          0.0px    107ms 
+  hit                A color:#007aff                      pixel          0.0px    122ms 
+  hit                A color:#ff9500                      pixel          0.0px    139ms 
+  hit                A color:#af52de                      pixel          0.0px    112ms 
+  hit                A color:#5ac8fa                      pixel          0.0px    111ms 
+  hit                A color:#ffcc00                      pixel          0.7px    110ms 
+  hit                A color:#ff2d55                      pixel          0.0px    114ms 
+
+== decoys
+  hit                A color:#ff3b30                      pixel          0.0px    157ms 
+  hit                A color:#34c759                      pixel          0.0px    148ms 
+
+== multi_window
+  hit                A color:#ff9500                      pixel          0.0px    125ms 
+  hit                A color:#af52de                      pixel          0.0px    112ms 
+  hit                A color:#5ac8fa                      pixel          0.0px    125ms 
+  hit                B color:#ff9500                      pixel          0.0px    110ms 
+  hit                B color:#af52de                      pixel          0.0px    137ms 
+  hit                B color:#5ac8fa                      pixel          0.0px    139ms 
+  hit                C color:#ff9500                      pixel          0.0px    123ms 
+  hit                C color:#af52de                      pixel          0.0px    107ms 
+  hit                C color:#5ac8fa                      pixel          0.0px    124ms 
+
+== overlap
+  A occluded by B: True
+  hit                A color:#ff3b30                      pixel          0.0px    107ms 
+  hit                A Render                             ocr            0.5px    345ms 
+
+== whack
+  hit                A color:#34c759                      pixel          0.0px    141ms 
+  hit                A color:#34c759                      pixel          0.0px    109ms 
+  hit                A color:#34c759                      pixel          0.0px    109ms 
+  hit                A color:#34c759                      pixel          0.0px    107ms 
+  hit                A color:#34c759                      pixel          0.0px    122ms 
+  hit                A color:#34c759                      pixel          0.0px    128ms 
+  hit                A color:#34c759                      pixel          0.0px    157ms 
+  hit                A color:#34c759                      pixel          0.0px    125ms 
+  hit                A color:#34c759                      pixel          0.0px    105ms 
+  hit                A color:#34c759                      pixel          0.0px    101ms 
+  hit                A color:#34c759                      pixel          0.0px    107ms 
+  hit                A color:#34c759                      pixel          0.0px    108ms 
+  hit                A color:#34c759                      pixel          0.0px    107ms 
+  hit                A color:#34c759                      pixel          0.0px    108ms 
+  hit                A color:#34c759                      pixel          0.0px    118ms 
+  hit                A color:#34c759                      pixel          0.0px    145ms 
+  hit                A color:#34c759                      pixel          0.0px    131ms 
+  hit                A color:#34c759                      pixel          0.0px    149ms 
+  hit                A color:#34c759                      pixel          0.0px    123ms 
+  hit                A color:#34c759                      pixel          0.0px    130ms 
+  hit                A color:#34c759                      pixel          0.0px    117ms 
+  hit                A color:#34c759                      pixel          0.0px    149ms 
+  hit                A color:#34c759                      pixel          0.0px    146ms 
+  hit                A color:#34c759                      pixel          0.0px    135ms 
+  hit                A color:#34c759                      pixel          0.0px    146ms 
+  hit                A color:#34c759                      pixel          0.0px    151ms 
+  hit                A color:#34c759                      pixel          0.0px    151ms 
+  hit                A color:#34c759                      pixel          0.0px    125ms 
+  hit                A color:#34c759                      pixel          0.0px    118ms 
+  hit                A color:#34c759                      pixel          0.0px    134ms 
+  hit                A color:#34c759                      pixel          0.0px    130ms 
+  hit                A color:#34c759                      pixel          0.0px    135ms 
+  hit                A color:#34c759                      pixel          0.0px    150ms 
+  hit                A color:#34c759                      pixel          0.0px    139ms 
+  hit                A color:#34c759                      pixel          0.0px    125ms 
+  hit                A color:#34c759                      pixel          0.0px    118ms 
+  hit                A color:#34c759                      pixel          0.0px    133ms 
+  whack_dot: 37 cycles in 10s
+  hit                A Zap                                ocr            2.7px    352ms 
+  hit                A Zap                                ocr            2.7px    323ms 
+  hit                A Zap                                ocr            2.7px    522ms 
+  hit                A Zap                                ocr            2.7px    276ms 
+  hit                A Zap                                ocr            2.7px    291ms 
+  hit                A Zap                                ocr            2.7px    326ms 
+  hit                A Zap                                ocr            2.7px    311ms 
+  hit                A Zap                                ocr            2.7px    311ms 
+  hit                A Zap                                ocr            2.7px    337ms 
+  hit                A Zap                                ocr            2.7px    320ms 
+  hit                A Zap                                ocr            2.7px    295ms 
+  hit                A Zap                                ocr            2.7px    342ms 
+  hit                A Zap                                ocr            2.7px    262ms 
+  hit                A Zap                                ocr            2.7px    309ms 
+  hit                A Zap                                ocr            2.7px    361ms 
+  hit                A Zap                                ocr            2.7px    355ms 
+  hit                A Zap                                ocr            2.7px    262ms 
+  hit                A Zap                                ocr            2.7px    280ms 
+  hit                A Zap                                ocr            2.7px    304ms 
+  target_not_found   A Zap                                -               -       401ms ocr_pass2: no match at 1x or 2x;No exact match for 'Zap'. Window may h
+  hit                A Zap                                ocr            2.7px    367ms 
+  hit                A Zap                                ocr            2.7px    374ms 
+  whack_text: 22 cycles in 10s
+
+== template
+  template level needs image targets; skipped on the win32 harness
+
+== marks
+  marks collected: 16 (12 ocr)
+  hit                A mark 13 (Filter)                   mark:ocr       0.5px     82ms 
+  hit                A mark 14 (Open)                     mark:ocr       1.6px    110ms 
+  hit                A mark 12 (Mute)                     mark:ocr       0.5px    106ms 
+  hit                A mark 11 (Zoom)                     mark:ocr       1.0px    125ms 
+  hit                A mark 16 (Solo)                     mark:ocr       0.7px    111ms 
+  hit                A mark 15 (Grid)                     mark:ocr       0.5px    121ms 
+
+GAUNTLET SUMMARY
+  total attempts : 94
+  correct        : 93  (98.9%)
+
+  level            ok/n    rate  miss p95  ms/att  statuses
+  tiny_text       8/8    100.0%       2.0     345  {'hit': 8} cursor_moved=0 {'message': 8}
+  color_dots      8/8    100.0%       0.0     120  {'hit': 8} cursor_moved=0 {'message': 8}
+  decoys          2/2    100.0%       0.0     153  {'hit': 2} cursor_moved=0 {'message': 2}
+  multi_window    9/9    100.0%       0.0     122  {'hit': 9} cursor_moved=0 {'message': 9}
+  overlap         2/2    100.0%       0.0     226  {'hit': 2} cursor_moved=0 {'message': 2}
+  whack          58/59    98.3%       2.7     204  {'hit': 58, 'target_not_found': 1} hps=2.78 cursor_moved=0 {'-': 1, 'message': 58}
+  marks           6/6    100.0%       1.0     109  {'hit': 6} cursor_moved=0 {'message': 6}
+
+  ALL LEVELS PASS
+
+report: C:\Users\you\AppData\Local\Temp\gauntlet-w32-auto.json

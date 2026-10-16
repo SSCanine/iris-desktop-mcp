@@ -1,0 +1,11 @@
+name: alt_tab_to
+description: Bring a window matching `title_contains` to the foreground.
+  Used by recipes that need to switch apps without knowing the exe name.
+inputs:
+  - title_contains
+steps:
+  - action: focus
+    args:
+      match:
+        title_contains: ${input.title_contains}
+      raise_window: true

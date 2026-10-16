@@ -1,0 +1,48 @@
+name: Accuracy regression
+description: A bench scenario got worse, or you reproduced a real-world click miss.
+labels: ["accuracy", "regression"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The bench is how we keep Iris honest. If it found a regression OR
+        you can reproduce one in a real app, attach the evidence.
+
+  - type: textarea
+    id: doctor
+    attributes:
+      label: iris-mcp doctor output
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: bench
+    attributes:
+      label: Bench report
+      description: Paste `$TEMP/iris_bench_report.json` summary section, or attach the full file.
+      render: text
+    validations:
+      required: true
+
+  - type: input
+    id: scenario
+    attributes:
+      label: Scenario id
+      description: e.g. baseline_static, window_dragged, per_monitor
+    validations:
+      required: true
+
+  - type: input
+    id: target
+    attributes:
+      label: Target id
+      description: Which target in the bench (or what label in your custom app) failed.
+    validations:
+      required: true
+
+  - type: textarea
+    id: failure_capture
+    attributes:
+      label: Failure capture
+      description: Attach the PNG from `$TEMP/iris_bench_failures/<scenario>_<target>.png` if the bench saved one.

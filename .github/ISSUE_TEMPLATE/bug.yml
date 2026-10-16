@@ -1,0 +1,53 @@
+name: Bug report
+description: Iris did something wrong, didn't do something it should, or crashed.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for filing a bug. Please run `iris-mcp doctor` and paste the
+        output below; it captures most of the environment we need.
+
+  - type: textarea
+    id: doctor
+    attributes:
+      label: iris-mcp doctor output
+      description: Output of `iris-mcp doctor`. If install is so broken you can't run it, say so.
+      render: text
+      placeholder: |
+        Iris doctor v0.x.y
+        Python: 3.12.7 on Windows-10-10.0.26100
+        DPI mode: per_monitor_v2
+        ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Minimal repro
+      description: Smallest tool call sequence (or pytest test) that reproduces it.
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: What actually happened
+      description: Include the full tool result dict if you have it. If a click missed, the bench output is invaluable.
+    validations:
+      required: true
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else
+      description: Screenshots, log lines from `logs/iris.log`, bench failure PNGs from `$TEMP/iris_bench_failures/`.

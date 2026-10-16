@@ -1,0 +1,128 @@
+
+==============================================================================
+IRIS ACCURACY BENCH  --  5 scenario(s)
+==============================================================================
+  events log: C:\Users\you\AppData\Local\Temp\iris_bench_events.jsonl
+  harness started  hwnd=7278712  pid=64080
+
+==============================================================================
+SCENARIO  baseline_static
+==============================================================================
+  Window placed once, no mutation. The cleanest possible pass.
+           PASS medium_center   backend=ocr            method=mouse    coord=(944,311)     miss=0.0px       825ms
+           PASS tiny_btn        backend=ocr            method=mouse    coord=(1524,303)    miss=0.0px       429ms
+           PASS short_label     backend=ocr            method=mouse    coord=(888,355)     miss=0.0px       430ms
+           PASS wide_row        backend=ocr            method=mouse    coord=(1044,395)    miss=0.0px       432ms
+           PASS icon_label      backend=ocr            method=mouse    coord=(954,443)     miss=0.0px       425ms
+           PASS huge_btn        backend=ocr            method=mouse    coord=(994,509)     miss=0.0px       447ms
+           PASS edge_right      backend=ocr            method=mouse    coord=(1565,343)    miss=0.0px       746ms
+           PASS ambiguous_a     backend=ocr            method=mouse    coord=(954,571)     miss=0.0px       481ms
+           PASS ambiguous_b     backend=ocr            method=mouse    coord=(954,615)     miss=0.0px       449ms
+           PASS lowercase_only  backend=ocr            method=mouse    coord=(974,659)     miss=0.0px       466ms
+
+==============================================================================
+SCENARIO  window_dragged
+==============================================================================
+  Window moved 400px right + 250px down before each click. Verifies live-bounds fix.
+           PASS medium_center   backend=ocr            method=mouse    coord=(1344,561)    miss=0.0px       802ms
+           PASS tiny_btn        backend=ocr            method=mouse    coord=(1924,553)    miss=0.0px       431ms
+           PASS wide_row        backend=ocr            method=mouse    coord=(1444,645)    miss=0.0px       425ms
+           PASS icon_label      backend=ocr            method=mouse    coord=(1354,693)    miss=0.0px       448ms
+           PASS huge_btn        backend=ocr            method=mouse    coord=(1394,759)    miss=0.0px       437ms
+           PASS edge_right      backend=ocr            method=mouse    coord=(1965,593)    miss=0.0px       717ms
+           PASS lowercase_only  backend=ocr            method=mouse    coord=(1374,909)    miss=0.0px       451ms
+
+==============================================================================
+SCENARIO  window_resized
+==============================================================================
+  Window resized to 700x500 (button layout reflows). Tests bounds-tracking under reshape.
+           PASS medium_center   backend=ocr            method=mouse    coord=(1344,561)    miss=0.0px       706ms
+           PASS tiny_btn        backend=ocr            method=mouse    coord=(1762,553)    miss=0.0px       450ms
+           PASS wide_row        backend=ocr            method=mouse    coord=(1444,645)    miss=0.0px       449ms
+           PASS icon_label      backend=ocr            method=mouse    coord=(1354,693)    miss=0.0px       523ms
+           PASS huge_btn        backend=ocr            method=mouse    coord=(1394,759)    miss=0.0px       458ms
+           PASS edge_right      backend=ocr            method=mouse    coord=(1803,593)    miss=0.0px       748ms
+           PASS lowercase_only  backend=ocr            method=mouse    coord=(1374,909)    miss=0.0px       471ms
+
+==============================================================================
+SCENARIO  per_monitor  (monitor 0: 2560x1080)
+==============================================================================
+  Window parked on each physical monitor in turn. Tests DPI-aware coord delivery across 100/125/150% scales.
+           PASS medium_center   backend=ocr            method=mouse    coord=(194,176)     miss=0.0px       776ms
+           PASS tiny_btn        backend=ocr            method=mouse    coord=(612,168)     miss=0.0px       458ms
+           PASS wide_row        backend=ocr            method=mouse    coord=(294,260)     miss=0.0px       450ms
+           PASS icon_label      backend=ocr            method=mouse    coord=(204,308)     miss=0.0px       446ms
+           PASS huge_btn        backend=ocr            method=mouse    coord=(244,374)     miss=0.0px       438ms
+           PASS edge_right      backend=ocr            method=mouse    coord=(653,208)     miss=0.0px       677ms
+           PASS lowercase_only  backend=ocr            method=mouse    coord=(224,524)     miss=0.0px       419ms
+
+==============================================================================
+SCENARIO  per_monitor  (monitor 1: 3840x2160)
+==============================================================================
+  Window parked on each physical monitor in turn. Tests DPI-aware coord delivery across 100/125/150% scales.
+           PASS medium_center   backend=ocr            method=mouse    coord=(198,-1963)   miss=0.0px       739ms
+           PASS tiny_btn        backend=ocr            method=mouse    coord=(610,-1971)   miss=0.0px       423ms
+           PASS wide_row        backend=ocr            method=mouse    coord=(298,-1879)   miss=0.0px       422ms
+           PASS icon_label      backend=ocr            method=mouse    coord=(208,-1831)   miss=0.0px       425ms
+           PASS huge_btn        backend=ocr            method=mouse    coord=(248,-1765)   miss=0.0px       682ms
+           PASS edge_right      backend=ocr            method=mouse    coord=(651,-1931)   miss=0.0px       693ms
+           PASS lowercase_only  backend=ocr            method=mouse    coord=(228,-1615)   miss=0.0px       418ms
+
+==============================================================================
+SCENARIO  per_monitor  (monitor 2: 3840x2160)
+==============================================================================
+  Window parked on each physical monitor in turn. Tests DPI-aware coord delivery across 100/125/150% scales.
+           PASS medium_center   backend=ocr            method=mouse    coord=(-3643,-890)  miss=0.0px       723ms
+           PASS tiny_btn        backend=ocr            method=mouse    coord=(-3230,-898)  miss=0.0px       406ms
+           PASS wide_row        backend=ocr            method=mouse    coord=(-3543,-806)  miss=0.0px       422ms
+           PASS icon_label      backend=ocr            method=mouse    coord=(-3633,-758)  miss=0.0px       420ms
+           PASS huge_btn        backend=ocr            method=mouse    coord=(-3593,-692)  miss=0.0px       429ms
+           PASS edge_right      backend=ocr            method=mouse    coord=(-3189,-858)  miss=0.0px       691ms
+           PASS lowercase_only  backend=ocr            method=mouse    coord=(-3613,-542)  miss=1.0px       421ms
+
+==============================================================================
+SCENARIO  per_monitor  (monitor 3: 1920x1080)
+==============================================================================
+  Window parked on each physical monitor in turn. Tests DPI-aware coord delivery across 100/125/150% scales.
+           PASS medium_center   backend=ocr            method=mouse    coord=(2754,176)    miss=0.0px       718ms
+           PASS tiny_btn        backend=ocr            method=mouse    coord=(3172,168)    miss=0.0px       413ms
+           PASS wide_row        backend=ocr            method=mouse    coord=(2854,260)    miss=0.0px       409ms
+           PASS icon_label      backend=ocr            method=mouse    coord=(2764,308)    miss=0.0px       425ms
+           PASS huge_btn        backend=ocr            method=mouse    coord=(2804,374)    miss=0.0px       427ms
+           PASS edge_right      backend=ocr            method=mouse    coord=(3213,208)    miss=0.0px       706ms
+           PASS lowercase_only  backend=ocr            method=mouse    coord=(2784,524)    miss=0.0px       422ms
+
+==============================================================================
+SCENARIO  raise_then_click
+==============================================================================
+  bring_to_front is called before each click. Tests that focus-rescue + capture line up.
+           PASS medium_center   backend=ocr            method=mouse    coord=(2754,176)    miss=0.0px       687ms
+           PASS tiny_btn        backend=ocr            method=mouse    coord=(3172,168)    miss=0.0px       414ms
+           PASS wide_row        backend=ocr            method=mouse    coord=(2854,260)    miss=0.0px       442ms
+           PASS icon_label      backend=ocr            method=mouse    coord=(2764,308)    miss=0.0px       447ms
+           PASS huge_btn        backend=ocr            method=mouse    coord=(2804,374)    miss=0.0px       449ms
+           PASS edge_right      backend=ocr            method=mouse    coord=(3213,208)    miss=0.0px       715ms
+           PASS lowercase_only  backend=ocr            method=mouse    coord=(2784,524)    miss=0.0px       399ms
+
+report written: C:\Users\you\AppData\Local\Temp\iris_bench_report.json
+
+==============================================================================
+SUMMARY
+==============================================================================
+  total attempts        : 59
+  find rate             : 100.0%
+  correct-button rate   : 100.0%
+  miss distance  mean   : 0.02 px
+  miss distance  p50    : 0.0 px
+  miss distance  p95    : 0.0 px
+  miss distance  max    : 1.0 px
+  backend distribution  : {'ocr': 59}
+  click method dist     : {'mouse': 59}
+  OCR -> UIA upgrades   : 59
+
+per-scenario:
+  baseline_static        correct=100.0%  miss_p50=0.0  miss_p95=0.0  backends={'ocr': 10}
+  window_dragged         correct=100.0%  miss_p50=0.0  miss_p95=0.0  backends={'ocr': 7}
+  window_resized         correct=100.0%  miss_p50=0.0  miss_p95=0.0  backends={'ocr': 7}
+  per_monitor            correct=100.0%  miss_p50=0.0  miss_p95=0.0  backends={'ocr': 28}
+  raise_then_click       correct=100.0%  miss_p50=0.0  miss_p95=0.0  backends={'ocr': 7}

@@ -1,0 +1,21 @@
+name: vscode.command_palette
+description: Open the VS Code command palette and run a command. Caller
+  passes `command` as input (e.g. "Format Document").
+inputs:
+  - command
+steps:
+  - id: f
+    action: focus
+    args:
+      match:
+        process: Code.exe
+      raise_window: true
+  - action: hotkey
+    args:
+      keys: [ctrl, shift, p]
+  - action: type_text
+    args:
+      text: ${input.command}
+  - action: press_key
+    args:
+      key: enter

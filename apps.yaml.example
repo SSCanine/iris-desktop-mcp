@@ -1,0 +1,32 @@
+# Iris app registry. Edit to add/override entries.
+# Used by `launch()` MCP tool. Each entry has:
+#   launch: path to executable, OR "shell:start <cmd>" for shell-launched apps
+#   match: spec dict for finding the spawned window (process, title_contains, class, etc.)
+
+obs:
+  launch: "C:\\Program Files\\obs-studio\\bin\\64bit\\obs64.exe"
+  match: { process: "obs64.exe", title_contains: "OBS" }
+
+chrome:
+  launch: "shell:start chrome"
+  match: { process: "chrome.exe" }
+
+edge:
+  launch: "shell:start msedge"
+  match: { process: "msedge.exe" }
+
+explorer:
+  launch: "explorer.exe"
+  match: { process: "explorer.exe" }
+
+vscode:
+  launch: "shell:start code"
+  match: { process: "Code.exe" }
+
+notepad:
+  launch: "notepad.exe"
+  match: { process: "notepad.exe", title_contains: "Notepad" }
+
+resolume:
+  launch: "shell:start \"\" \"C:\\Program Files\\Resolume Avenue\\Avenue.exe\""
+  match: { process: "Avenue.exe" }

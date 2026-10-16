@@ -1,0 +1,21 @@
+name: chrome.open_url
+description: Open a URL in the foreground Chrome window by triggering the
+  omnibar, typing the URL, and pressing Enter. Caller passes `url` as input.
+inputs:
+  - url
+steps:
+  - id: f
+    action: focus
+    args:
+      match:
+        process: chrome.exe
+      raise_window: true
+  - action: hotkey
+    args:
+      keys: [ctrl, l]
+  - action: type_text
+    args:
+      text: ${input.url}
+  - action: press_key
+    args:
+      key: enter

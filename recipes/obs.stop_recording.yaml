@@ -1,0 +1,19 @@
+name: obs.stop_recording
+description: Bring OBS to front and click Stop Recording. Verifies the
+  control panel changed back to a Start Recording state.
+steps:
+  - id: f
+    action: focus
+    args:
+      match:
+        process: obs64.exe
+      raise_window: true
+  - action: click
+    args:
+      token: ${f.token}
+      target: Stop Recording
+  - action: wait_for
+    args:
+      token: ${f.token}
+      target: Start Recording
+      timeout_ms: 4000

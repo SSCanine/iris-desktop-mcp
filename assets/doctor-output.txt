@@ -1,0 +1,27 @@
+Iris doctor
+  iris-mcp version       : 0.1.0
+  python                 : 3.12.7 (C:\Users\you\AppData\Local\Programs\Python\Python312\python.exe)
+  platform               : Windows 11 (AMD64)
+  DPI mode               : per_monitor_v2  (per_monitor_v2 is best)
+  Win32 (pywin32)        : available
+  UIA (uiautomation)     : available  (install for accessibility-tree queries)
+  Clipboard (win32clip.) : available
+  psutil (processes)     : available
+  winreg (registry)      : available
+  Tesseract OCR          : C:\Program Files\Tesseract-OCR\tesseract.exe
+  Toast notifications    : not installed (optional). pip install iris-mcp[notifications]
+
+Monitors
+  4 monitor(s); virtual desktop (-3840, -2160) -> (4480, 1080) = 8320x3240
+  capture_id 1  PRIMARY  \\.\DISPLAY3   (     0,      0) -> (  2560,   1080)  size 2560x1080  DPI 96  scale 1.00x
+  capture_id 2           \\.\DISPLAY4   (     0,  -2160) -> (  3840,      0)  size 3840x2160  DPI 168  scale 1.75x
+  capture_id 3           \\.\DISPLAY2   ( -3840,  -1080) -> (     0,   1080)  size 3840x2160  DPI 144  scale 1.50x
+  capture_id 4           \\.\DISPLAY1   (  2560,      0) -> (  4480,   1080)  size 1920x1080  DPI 96  scale 1.00x
+
+Config locations
+  apps.yaml search order:
+    C:\src\iris-desktop-mcp\apps.yaml  [not present]
+    C:\Users\you\AppData\Local\iris-mcp\iris-mcp\apps.yaml  [not present]
+    C:\src\iris-desktop-mcp\apps.yaml  [not present]
+
+OK  all critical components available

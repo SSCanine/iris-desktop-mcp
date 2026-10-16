@@ -1,0 +1,87 @@
+{
+  "dxt_version": "0.1",
+  "name": "iris-mcp",
+  "display_name": "Iris",
+  "version": "0.1.0",
+  "description": "High-precision Windows desktop control for AI agents.",
+  "long_description": "Iris is an MCP server that lets LLMs see, find, and click real UI on Windows with sub-pixel accuracy on mixed-DPI multi-monitor setups. Three rendering backends (Win32 spatial, UIA semantic, OCR vision) behind one resolver, so it works on apps that hide from accessibility trees (Tkinter, custom Qt, OBS dock widgets, Resolume panels). Includes clipboard, process, notifications, window state, and registry tools. Comes with a live accuracy bench that lets users verify the click-precision claims on their own machine.",
+  "author": {
+    "name": "The Iris MCP authors",
+    "url": "https://github.com/SSCanine/iris-desktop-mcp"
+  },
+  "homepage": "https://github.com/SSCanine/iris-desktop-mcp",
+  "documentation": "https://github.com/SSCanine/iris-desktop-mcp/blob/main/README.md",
+  "support": "https://github.com/SSCanine/iris-desktop-mcp/issues",
+  "license": "MIT",
+  "keywords": [
+    "windows",
+    "automation",
+    "computer-use",
+    "ocr",
+    "uia",
+    "accessibility",
+    "screen-capture",
+    "ai-agents"
+  ],
+  "icon": "assets/icon.png",
+  "server": {
+    "type": "python",
+    "entry_point": "server.py",
+    "mcp_config": {
+      "command": "${__dirname}/venv/Scripts/python.exe",
+      "args": ["${__dirname}/server.py"],
+      "env": {
+        "PYTHONUNBUFFERED": "1"
+      }
+    }
+  },
+  "requirements": {
+    "python": ">=3.10",
+    "platforms": ["win32"]
+  },
+  "tools": [
+    {"name": "iris_status", "description": "Backend availability, OCR + UIA readiness, DPI mode, cache stats."},
+    {"name": "self_test", "description": "Run the 15-check battery against a built-in Tk harness."},
+    {"name": "list_windows", "description": "Enumerate top-level windows."},
+    {"name": "find_window", "description": "Match a single window from a spec."},
+    {"name": "screen_info", "description": "Monitor count, resolutions, scaling."},
+    {"name": "focus", "description": "Bring a window forward and get a FocusToken."},
+    {"name": "see", "description": "Window-cropped screenshot."},
+    {"name": "see_full", "description": "Whole-desktop screenshot."},
+    {"name": "screenshot", "description": "Full-screen capture."},
+    {"name": "screenshot_window", "description": "Capture a specific window."},
+    {"name": "screenshot_full", "description": "Capture the full desktop."},
+    {"name": "find", "description": "Resolver-routed locate (UIA -> OCR -> handoff)."},
+    {"name": "inspect", "description": "Walk the UIA tree."},
+    {"name": "discover", "description": "Full ground-truth dump (UIA + OCR + screenshot)."},
+    {"name": "suggest_alternatives", "description": "Lower-threshold fuzzy matches."},
+    {"name": "wait_for", "description": "Poll for text/state changes with backoff."},
+    {"name": "click", "description": "Find + click with optional UIA-invoke fast path."},
+    {"name": "mouse_move", "description": "Move cursor."},
+    {"name": "mouse_click", "description": "Click at point or current position."},
+    {"name": "mouse_drag", "description": "Drag with stepped motion."},
+    {"name": "mouse_scroll", "description": "Scroll wheel."},
+    {"name": "mouse_pos", "description": "Current cursor position."},
+    {"name": "type_text", "description": "Type a string."},
+    {"name": "press_key", "description": "Single key + optional modifiers."},
+    {"name": "hotkey", "description": "Key combination."},
+    {"name": "launch", "description": "Start an app from the registry."},
+    {"name": "list_apps", "description": "Apps the registry knows about."},
+    {"name": "list_recipes", "description": "Available named workflows."},
+    {"name": "run_recipe", "description": "Execute a recipe by name."},
+    {"name": "clipboard_get", "description": "Read text from the Windows clipboard."},
+    {"name": "clipboard_set", "description": "Write text to the Windows clipboard."},
+    {"name": "list_processes", "description": "Enumerate running processes."},
+    {"name": "find_process", "description": "Find processes by exact name."},
+    {"name": "kill_process", "description": "Terminate a process by PID. Requires force=True."},
+    {"name": "notify", "description": "Show a Windows toast notification."},
+    {"name": "window_minimize", "description": "Minimize a window by hwnd."},
+    {"name": "window_maximize", "description": "Maximize a window by hwnd."},
+    {"name": "window_restore", "description": "Restore a window to normal size."},
+    {"name": "window_close", "description": "Politely close a window via WM_CLOSE."},
+    {"name": "registry_read", "description": "Read a Windows registry value."},
+    {"name": "registry_list_values", "description": "Enumerate values under a registry key."},
+    {"name": "registry_write", "description": "Write a registry value. Requires confirm=True."},
+    {"name": "registry_delete_value", "description": "Delete a registry value. Requires confirm=True."}
+  ]
+}

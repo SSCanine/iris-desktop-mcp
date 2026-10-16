@@ -1,0 +1,19 @@
+name: obs.start_recording
+description: Bring OBS to front and click Start Recording. Verifies the
+  control panel changed to Recording state before returning.
+steps:
+  - id: f
+    action: focus
+    args:
+      match:
+        process: obs64.exe
+      raise_window: true
+  - action: click
+    args:
+      token: ${f.token}
+      target: Start Recording
+  - action: wait_for
+    args:
+      token: ${f.token}
+      target: Stop Recording
+      timeout_ms: 4000

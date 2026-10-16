@@ -1,0 +1,43 @@
+name: Feature request
+description: Suggest a new tool, scenario, or capability.
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before filing, check `docs/specs/` for what's in scope. Iris is "eyes
+        and hands plus light system integration"; broad OS automation (shell
+        scripting, full filesystem ops) is out of scope (we expect the LLM
+        client to already have those primitives).
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem are you trying to solve?
+      description: The user-facing pain, not the proposed implementation.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Sketch of the tool surface or behavior.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives you considered
+
+  - type: textarea
+    id: scope
+    attributes:
+      label: How does this fit Iris's scope?
+      description: |
+        See README -> "How Iris differs from other Windows MCP servers" for
+        the framing. If your feature duplicates something a generic shell or
+        filesystem tool already does, explain why Iris-side is preferable.
+    validations:
+      required: true
