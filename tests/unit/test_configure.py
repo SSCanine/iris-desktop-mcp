@@ -174,14 +174,26 @@ def test_claude_desktop_tolerates_empty_bom_and_null(tmp_path, monkeypatch, spec
     client = cfg.ClaudeDesktop()
     assert client.current_entry() is None
     client.register(spec)
-    assert json.loads(conf.read_text(encoding="utf-8"))["mcpServers"]["iris"]["command"] == spec.command
+    assert (
+        json.loads(conf.read_text(encoding="utf-8"))["mcpServers"]["iris"]["command"]
+        == spec.command
+    )
 
 
 def test_claude_desktop_prefers_store_copy(tmp_path, monkeypatch):
     monkeypatch.setenv("APPDATA", str(tmp_path / "roaming"))
     monkeypatch.setenv("LOCALAPPDATA", str(tmp_path / "local"))
     roaming = tmp_path / "roaming" / "Claude" / "claude_desktop_config.json"
-    store = tmp_path / "local" / "Packages" / "Claude_abc" / "LocalCache" / "Roaming" / "Claude" / "claude_desktop_config.json"
+    store = (
+        tmp_path
+        / "local"
+        / "Packages"
+        / "Claude_abc"
+        / "LocalCache"
+        / "Roaming"
+        / "Claude"
+        / "claude_desktop_config.json"
+    )
     for p in (roaming, store):
         p.parent.mkdir(parents=True)
         p.write_text("{}")

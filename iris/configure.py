@@ -48,8 +48,13 @@ REQUIRED_MODULES = {
 }
 
 TESSERACT_WINGET = [
-    "winget", "install", "--id", "UB-Mannheim.TesseractOCR", "-e",
-    "--accept-source-agreements", "--accept-package-agreements",
+    "winget",
+    "install",
+    "--id",
+    "UB-Mannheim.TesseractOCR",
+    "-e",
+    "--accept-source-agreements",
+    "--accept-package-agreements",
 ]
 
 # Keep child consoles from flashing when the GUI runs a subprocess.
@@ -66,14 +71,14 @@ OCR_PASS2_PSM_DEFAULT = 6
 class Settings:
     """What the user picks in the setup UI. Becomes the server's env vars."""
 
-    python: str = ""          # interpreter that has Iris's dependencies
-    log_dir: str = ""         # IRIS_LOG_DIR (blank = default)
-    telemetry: bool = True    # IRIS_TELEMETRY=0 when off
-    apps_file: str = ""       # IRIS_APPS (blank = default search)
-    tesseract: str = ""       # IRIS_TESSERACT (blank = auto-detect)
+    python: str = ""  # interpreter that has Iris's dependencies
+    log_dir: str = ""  # IRIS_LOG_DIR (blank = default)
+    telemetry: bool = True  # IRIS_TELEMETRY=0 when off
+    apps_file: str = ""  # IRIS_APPS (blank = default search)
+    tesseract: str = ""  # IRIS_TESSERACT (blank = auto-detect)
     ocr_psm: int = OCR_PSM_DEFAULT
     ocr_pass2_psm: int = OCR_PASS2_PSM_DEFAULT
-    uia_walk: bool = False    # IRIS_UIA_WALK=1 forces full UIA tree walks
+    uia_walk: bool = False  # IRIS_UIA_WALK=1 forces full UIA tree walks
 
     def env(self) -> dict[str, str]:
         """Only non-default values, so client configs stay short."""
@@ -164,7 +169,10 @@ def check_python(python: str) -> PythonCheck:
     try:
         out = subprocess.run(
             [python, "-c", _PROBE, json.dumps(REQUIRED_MODULES)],
-            capture_output=True, text=True, timeout=60, creationflags=NO_WINDOW,
+            capture_output=True,
+            text=True,
+            timeout=60,
+            creationflags=NO_WINDOW,
         )
         data = json.loads(out.stdout.strip().splitlines()[-1])
     except (OSError, subprocess.SubprocessError, ValueError, IndexError) as exc:
@@ -222,7 +230,11 @@ def create_apps_file() -> Path:
         example = REPO_ROOT / "apps.yaml.example"
         if not example.exists():
             example = PACKAGE_DIR / "apps.yaml.example"
-        text = example.read_text(encoding="utf-8") if example.exists() else "# name:\n#   launch: \"C:\\\\path\\\\to\\\\app.exe\"\n"
+        text = (
+            example.read_text(encoding="utf-8")
+            if example.exists()
+            else '# name:\n#   launch: "C:\\\\path\\\\to\\\\app.exe"\n'
+        )
         _write_atomic(target, text)
     return target
 
@@ -424,9 +436,15 @@ class ClaudeCode(Client):
         if code != 0:
             restored = ""
             if old and old.get("command"):
-                prev = LaunchSpec(old["command"], list(old.get("args") or []), dict(old.get("env") or {}))
+                prev = LaunchSpec(
+                    old["command"], list(old.get("args") or []), dict(old.get("env") or {})
+                )
                 rc, _ = _run(self._add_argv(prev, cli))
-                restored = " Previous entry restored." if rc == 0 else " Previous entry could NOT be restored."
+                restored = (
+                    " Previous entry restored."
+                    if rc == 0
+                    else " Previous entry could NOT be restored."
+                )
             raise RuntimeError(f"claude mcp add failed ({code}): {out.strip()}{restored}")
         return f"Claude Code: registered (user scope). {self.restart_hint}"
 
@@ -457,8 +475,11 @@ class ClaudeDesktop(Client):
         local = os.environ.get("LOCALAPPDATA")
         if local:
             # Microsoft Store (MSIX) installs keep a virtualized copy.
-            candidates += sorted((Path(local) / "Packages").glob(
-                "Claude_*/LocalCache/Roaming/Claude/claude_desktop_config.json"))
+            candidates += sorted(
+                (Path(local) / "Packages").glob(
+                    "Claude_*/LocalCache/Roaming/Claude/claude_desktop_config.json"
+                )
+            )
         # A Store install reads its own virtualized copy first, so prefer it.
         ordered = candidates[1:] + candidates[:1] if appdata else candidates
         for c in ordered:
@@ -624,14 +645,16 @@ def _check_shim_args(cli: str, argv: list[str]) -> None:
     bad = [a for a in argv[1:] if _CMD_META & set(a)]
     if bad:
         raise ValueError(
-            f"{bad[0]!r} contains a character cmd.exe would mangle (& | < > ^ % ! \"). "
-            "Pick a path without it, or use Copy config and run the command yourself.")
+            f'{bad[0]!r} contains a character cmd.exe would mangle (& | < > ^ % ! "). '
+            "Pick a path without it, or use Copy config and run the command yourself."
+        )
 
 
 def _run(argv: list[str], timeout: int = 120) -> tuple[int, str]:
     try:
-        p = subprocess.run(argv, capture_output=True, text=True, timeout=timeout,
-                           creationflags=NO_WINDOW)
+        p = subprocess.run(
+            argv, capture_output=True, text=True, timeout=timeout, creationflags=NO_WINDOW
+        )
     except (OSError, subprocess.SubprocessError) as exc:
         return 1, str(exc)
     return p.returncode, (p.stdout or "") + (p.stderr or "")
@@ -641,20 +664,34 @@ def _run(argv: list[str], timeout: int = 120) -> tuple[int, str]:
 # Command line
 # ---------------------------------------------------------------------------
 def main(argv: list[str] | None = None) -> int:
-    ap = argparse.ArgumentParser(prog="python -m iris.configure", description=__doc__.split("\n\n")[0])
-    ap.add_argument("--client", action="append", choices=[c.key for c in CLIENTS],
-                    help="client to configure (repeatable; default: every installed one)")
+    ap = argparse.ArgumentParser(
+        prog="python -m iris.configure", description=__doc__.split("\n\n")[0]
+    )
+    ap.add_argument(
+        "--client",
+        action="append",
+        choices=[c.key for c in CLIENTS],
+        help="client to configure (repeatable; default: every installed one)",
+    )
     ap.add_argument("--python", help="interpreter with Iris's dependencies (default: this one)")
     ap.add_argument("--remove", action="store_true", help="unregister instead of register")
-    ap.add_argument("--guide", action="store_true", help="also add the usage guide to CLAUDE.md / AGENTS.md")
-    ap.add_argument("--print", dest="dry", action="store_true", help="print the config, change nothing")
+    ap.add_argument(
+        "--guide", action="store_true", help="also add the usage guide to CLAUDE.md / AGENTS.md"
+    )
+    ap.add_argument(
+        "--print", dest="dry", action="store_true", help="print the config, change nothing"
+    )
     args = ap.parse_args(argv)
 
     settings = load_settings()
     if args.python:
         settings.python = args.python
     spec = launch_spec(settings)
-    clients = [client_by_key(k) for k in args.client] if args.client else [c for c in CLIENTS if c.installed()]
+    clients = (
+        [client_by_key(k) for k in args.client]
+        if args.client
+        else [c for c in CLIENTS if c.installed()]
+    )
     if not clients:
         print("No supported client found (Claude Code, Claude Desktop, Codex).")
         return 1

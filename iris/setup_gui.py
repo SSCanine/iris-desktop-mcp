@@ -80,9 +80,14 @@ class SetupApp:
         head = ttk.Frame(outer)
         head.grid(row=0, column=0, sticky="ew", pady=(0, 8))
         ttk.Label(head, text="Iris setup", style="Title.TLabel").pack(side="left")
-        ttk.Label(head, text=f"v{__version__}", style="Sub.TLabel").pack(side="left", padx=8, pady=(6, 0))
-        ttk.Label(outer, text="Windows desktop control for Claude and Codex. Work top to bottom.",
-                  style="Sub.TLabel").grid(row=1, column=0, sticky="w", pady=(0, 8))
+        ttk.Label(head, text=f"v{__version__}", style="Sub.TLabel").pack(
+            side="left", padx=8, pady=(6, 0)
+        )
+        ttk.Label(
+            outer,
+            text="Windows desktop control for Claude and Codex. Work top to bottom.",
+            style="Sub.TLabel",
+        ).grid(row=1, column=0, sticky="w", pady=(0, 8))
 
         probe = ttk.Button(outer, text="Install dependencies", width=20)
         self.extra_w = probe.winfo_reqwidth() + 6
@@ -91,59 +96,91 @@ class SetupApp:
         row = 2
         # 1. Python
         f = self._step(outer, row, "1  Python")
-        self._path_row(f, 0, "Interpreter", self.v_python, self._browse_python,
-                       ("Install dependencies", self.install_deps))
+        self._path_row(
+            f,
+            0,
+            "Interpreter",
+            self.v_python,
+            self._browse_python,
+            ("Install dependencies", self.install_deps),
+        )
         self.lbl_python = self._status(f, 1)
         row += 1
 
         # 2. Tesseract
         f = self._step(outer, row, "2  OCR (Tesseract)")
-        self._path_row(f, 0, "tesseract.exe", self.v_tess, self._browse_tesseract,
-                       ("Install with winget", self.install_tesseract))
+        self._path_row(
+            f,
+            0,
+            "tesseract.exe",
+            self.v_tess,
+            self._browse_tesseract,
+            ("Install with winget", self.install_tesseract),
+        )
         self.lbl_tess = self._status(f, 1)
         row += 1
 
         # 3. Options
         f = self._step(outer, row, "3  Options")
         self._path_row(f, 0, "Log folder", self.v_logdir, self._browse_logdir)
-        self._path_row(f, 1, "Apps file", self.v_apps, self._browse_apps,
-                       ("Create apps.yaml", self.create_apps))
+        self._path_row(
+            f,
+            1,
+            "Apps file",
+            self.v_apps,
+            self._browse_apps,
+            ("Create apps.yaml", self.create_apps),
+        )
         opts = ttk.Frame(f)
         opts.grid(row=2, column=0, columnspan=4, sticky="w", pady=(6, 0))
-        ttk.Checkbutton(opts, text="Keep a local event log (events.jsonl)",
-                        variable=self.v_telemetry).pack(side="left")
-        ttk.Checkbutton(opts, text="Full UIA tree walk (slower, finds more)",
-                        variable=self.v_uia_walk).pack(side="left", padx=(16, 0))
+        ttk.Checkbutton(
+            opts, text="Keep a local event log (events.jsonl)", variable=self.v_telemetry
+        ).pack(side="left")
+        ttk.Checkbutton(
+            opts, text="Full UIA tree walk (slower, finds more)", variable=self.v_uia_walk
+        ).pack(side="left", padx=(16, 0))
         ocr = ttk.Frame(f)
         ocr.grid(row=3, column=0, columnspan=4, sticky="w", pady=(6, 0))
         ttk.Label(ocr, text="OCR page mode").pack(side="left")
-        ttk.Spinbox(ocr, from_=0, to=13, width=4, textvariable=self.v_psm).pack(side="left", padx=(6, 16))
+        ttk.Spinbox(ocr, from_=0, to=13, width=4, textvariable=self.v_psm).pack(
+            side="left", padx=(6, 16)
+        )
         ttk.Label(ocr, text="Fallback mode").pack(side="left")
-        ttk.Spinbox(ocr, from_=0, to=13, width=4, textvariable=self.v_psm2).pack(side="left", padx=6)
+        ttk.Spinbox(ocr, from_=0, to=13, width=4, textvariable=self.v_psm2).pack(
+            side="left", padx=6
+        )
         ttk.Label(ocr, text="defaults 11 / 6", style="Sub.TLabel").pack(side="left", padx=6)
         ttk.Label(f, text="Blank fields use the defaults.", style="Sub.TLabel").grid(
-            row=4, column=0, columnspan=4, sticky="w", pady=(6, 0))
+            row=4, column=0, columnspan=4, sticky="w", pady=(6, 0)
+        )
         row += 1
 
         # 4. Connect
         f = self._step(outer, row, "4  Connect your AI clients")
         for i, c in enumerate(cfg.CLIENTS):
             ttk.Checkbutton(f, text=c.label, variable=self.v_clients[c.key]).grid(
-                row=i, column=0, sticky="w", pady=2)
+                row=i, column=0, sticky="w", pady=2
+            )
             lbl = ttk.Label(f, text="checking...", foreground=IDLE)
             lbl.grid(row=i, column=1, sticky="w", padx=8)
             self.client_status[c.key] = lbl
             ttk.Button(f, text="Copy config", command=lambda c=c: self.copy_config(c)).grid(
-                row=i, column=2, sticky="e", padx=(0, 6))
+                row=i, column=2, sticky="e", padx=(0, 6)
+            )
             ttk.Button(f, text="Remove", command=lambda c=c: self.remove(c)).grid(
-                row=i, column=3, sticky="e")
+                row=i, column=3, sticky="e"
+            )
         f.columnconfigure(1, weight=1)
         bottom = ttk.Frame(f)
         bottom.grid(row=len(cfg.CLIENTS), column=0, columnspan=4, sticky="ew", pady=(8, 0))
-        ttk.Checkbutton(bottom, text="Also add the Iris usage guide to CLAUDE.md / AGENTS.md",
-                        variable=self.v_guide).pack(side="left")
-        ttk.Button(bottom, text="Connect selected", style="Accent.TButton",
-                   command=self.connect).pack(side="right")
+        ttk.Checkbutton(
+            bottom,
+            text="Also add the Iris usage guide to CLAUDE.md / AGENTS.md",
+            variable=self.v_guide,
+        ).pack(side="left")
+        ttk.Button(
+            bottom, text="Connect selected", style="Accent.TButton", command=self.connect
+        ).pack(side="right")
         row += 1
 
         # 5. Test
@@ -160,8 +197,16 @@ class SetupApp:
         outer.rowconfigure(row, weight=1)
         out.columnconfigure(0, weight=1)
         out.rowconfigure(0, weight=1)
-        self.text = tk.Text(out, height=9, wrap="word", font=("Cascadia Mono", 9),
-                            relief="flat", background="#f6f8fa", padx=8, pady=6)
+        self.text = tk.Text(
+            out,
+            height=9,
+            wrap="word",
+            font=("Cascadia Mono", 9),
+            relief="flat",
+            background="#f6f8fa",
+            padx=8,
+            pady=6,
+        )
         self.text.grid(row=0, column=0, sticky="nsew")
         sb = ttk.Scrollbar(out, command=self.text.yview)
         sb.grid(row=0, column=1, sticky="ns")
@@ -268,9 +313,17 @@ class SetupApp:
         self.log("> " + subprocess.list2cmdline(argv))
         env = {**os.environ, "PYTHONIOENCODING": "utf-8", "NO_COLOR": "1", **(extra_env or {})}
         try:
-            p = subprocess.Popen(argv, cwd=cfg.REPO_ROOT, env=env, stdout=subprocess.PIPE,
-                                 stderr=subprocess.STDOUT, text=True, encoding="utf-8",
-                                 errors="replace", creationflags=cfg.NO_WINDOW)
+            p = subprocess.Popen(
+                argv,
+                cwd=cfg.REPO_ROOT,
+                env=env,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+                creationflags=cfg.NO_WINDOW,
+            )
         except OSError as exc:
             self.log(f"could not start: {exc}")
             return 1
@@ -299,23 +352,34 @@ class SetupApp:
         tess = cfg.find_tesseract(s)
         if tess:
             how = "" if s.tesseract else " (auto-detected)"
-            self.ui(lambda t=f"● Found {tess}{how}": self.lbl_tess.configure(text=t, foreground=GOOD))
+            self.ui(
+                lambda t=f"● Found {tess}{how}": self.lbl_tess.configure(text=t, foreground=GOOD)
+            )
         else:
-            self.ui(lambda: self.lbl_tess.configure(
-                text="● Not found. OCR fallback is off; UIA and pixel search still work.",
-                foreground=WARN))
+            self.ui(
+                lambda: self.lbl_tess.configure(
+                    text="● Not found. OCR fallback is off; UIA and pixel search still work.",
+                    foreground=WARN,
+                )
+            )
 
         spec = cfg.launch_spec(s)
         for c in cfg.CLIENTS:
             st = c.status(spec)
             color = GOOD if st.registered and st.matches else WARN if st.installed else IDLE
             lbl = self.client_status[c.key]
-            self.ui(lambda lbl=lbl, st=st, color=color: lbl.configure(text="● " + st.label, foreground=color))
+            self.ui(
+                lambda lbl=lbl, st=st, color=color: lbl.configure(
+                    text="● " + st.label, foreground=color
+                )
+            )
             if first:
                 var = self.v_clients[c.key]
                 self.ui(lambda var=var, on=st.installed: var.set(on))
         if first:
-            self.log("Ready. Installed clients are ticked in step 4; press Connect selected when done.")
+            self.log(
+                "Ready. Installed clients are ticked in step 4; press Connect selected when done."
+            )
 
     # ------------------------------------------------------------- actions
     def install_deps(self) -> None:
@@ -325,10 +389,11 @@ class SetupApp:
 
     def install_tesseract(self) -> None:
         if not messagebox.askyesno(
-                "Install Tesseract",
-                "Install Tesseract OCR with winget?\n\n"
-                + subprocess.list2cmdline(cfg.TESSERACT_WINGET)
-                + "\n\nWindows may ask for permission."):
+            "Install Tesseract",
+            "Install Tesseract OCR with winget?\n\n"
+            + subprocess.list2cmdline(cfg.TESSERACT_WINGET)
+            + "\n\nWindows may ask for permission.",
+        ):
             return
         s = self.settings()
         self._bg(lambda: (self._stream(cfg.TESSERACT_WINGET), self._refresh(s, False)))
@@ -359,9 +424,10 @@ class SetupApp:
 
             def ask():
                 if messagebox.askyesno(
-                        "Python not ready",
-                        f"The selected Python is not ready:\n{problem}"
-                        "\n\nIris will fail to start until this is fixed. Connect anyway?"):
+                    "Python not ready",
+                    f"The selected Python is not ready:\n{problem}"
+                    "\n\nIris will fail to start until this is fixed. Connect anyway?",
+                ):
                     self._bg(work)
 
             self.ui(ask)
@@ -410,9 +476,13 @@ class SetupApp:
     def run_self_test(self) -> None:
         s = self.settings()
         py = cfg.console_python(s.python or cfg.default_python())
-        code = ("import json; from iris.self_test import run_self_test; "
-                "print(json.dumps(run_self_test(), indent=2))")
-        self.log("Self-test opens a small test window and clicks inside it. Hands off for a few seconds.")
+        code = (
+            "import json; from iris.self_test import run_self_test; "
+            "print(json.dumps(run_self_test(), indent=2))"
+        )
+        self.log(
+            "Self-test opens a small test window and clicks inside it. Hands off for a few seconds."
+        )
         self._bg(self._stream, [py, "-c", code], s.env())
 
     def open_logs(self) -> None:
@@ -422,7 +492,9 @@ class SetupApp:
         elif (cfg.REPO_ROOT / "server.py").exists():
             path = cfg.REPO_ROOT / "logs"
         else:
-            path = Path(os.environ.get("LOCALAPPDATA", Path.home())) / "iris-mcp" / "iris-mcp" / "Logs"
+            path = (
+                Path(os.environ.get("LOCALAPPDATA", Path.home())) / "iris-mcp" / "iris-mcp" / "Logs"
+            )
         if path.exists():
             os.startfile(path)  # type: ignore[attr-defined]
         else:
@@ -430,15 +502,18 @@ class SetupApp:
 
     # -------------------------------------------------------------- browse
     def _browse_python(self) -> None:
-        p = filedialog.askopenfilename(title="Choose python.exe",
-                                       filetypes=[("Python", "python.exe"), ("Programs", "*.exe")])
+        p = filedialog.askopenfilename(
+            title="Choose python.exe", filetypes=[("Python", "python.exe"), ("Programs", "*.exe")]
+        )
         if p:
             self.v_python.set(cfg.console_python(p))
             self.refresh()
 
     def _browse_tesseract(self) -> None:
-        p = filedialog.askopenfilename(title="Choose tesseract.exe",
-                                       filetypes=[("Tesseract", "tesseract.exe"), ("Programs", "*.exe")])
+        p = filedialog.askopenfilename(
+            title="Choose tesseract.exe",
+            filetypes=[("Tesseract", "tesseract.exe"), ("Programs", "*.exe")],
+        )
         if p:
             self.v_tess.set(str(Path(p)))
             self.refresh()
@@ -449,8 +524,9 @@ class SetupApp:
             self.v_logdir.set(str(Path(p)))
 
     def _browse_apps(self) -> None:
-        p = filedialog.askopenfilename(title="Choose apps.yaml",
-                                       filetypes=[("YAML", "*.yaml *.yml"), ("All files", "*.*")])
+        p = filedialog.askopenfilename(
+            title="Choose apps.yaml", filetypes=[("YAML", "*.yaml *.yml"), ("All files", "*.*")]
+        )
         if p:
             self.v_apps.set(str(Path(p)))
 
