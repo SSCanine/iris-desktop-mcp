@@ -240,3 +240,53 @@ def test_ocr_second_pass_uses_upscale_and_block_psm(monkeypatch):
     big = Image.new("RGB", (3840, 2160), (255, 255, 255))
     resolver._ocr_passes(_fake_token(), big, "Save", True, 0.6)
     assert calls == [(None, None)]
+
+
+def test_telemetry_redacts_typed_text_in_args(tmp_path, monkeypatch):
+    """do() args carry what a type/set step enters (possibly a password); the
+    events log must keep only its length (security review 2026-11)."""
+    monkeypatch.setattr(telemetry, "_DISABLED", False)
+    telemetry.configure(tmp_path)
+    steps = [
+        {"action": "click", "target": "Password"},
+        {"action": "type", "text": "hunter2-secret"},
+        {"action": "set", "target": "Search", "value": "s3cr3t"},
+    ]
+    telemetry.record("do", args={"steps": steps, "token": "t1"}, ok=True)
+    raw = (tmp_path / telemetry.EVENTS_FILENAME).read_text(encoding="utf-8")
+    assert "hunter2-secret" not in raw and "s3cr3t" not in raw
+    rec = json.loads(raw.splitlines()[0])
+    logged = rec["args"]["steps"]
+    assert logged[0] == {"action": "click", "target": "Password"}
+    assert logged[1]["text"] == "<redacted 14 chars>"
+    assert logged[2]["value"] == "<redacted 6 chars>"
+    assert logged[2]["target"] == "Search"
+    # The caller's own objects are not mutated.
+    assert steps[1]["text"] == "hunter2-secret"
+
+
+def test_telemetry_redacts_set_value_echoed_in_do_results(tmp_path, monkeypatch):
+    """A set step returns {"pattern": "value", "value": <entered text>} and do()
+    passes it through; the logged result must keep only its length."""
+    monkeypatch.setattr(telemetry, "_DISABLED", False)
+    telemetry.configure(tmp_path)
+    telemetry.record(
+        "do",
+        args={"steps": [{"action": "set", "target": "Password", "value": "s3cr3t-PW"}]},
+        ok=True,
+        results=[{"step": 0, "ok": True, "pattern": "value", "value": "s3cr3t-PW"}],
+    )
+    raw = (tmp_path / telemetry.EVENTS_FILENAME).read_text(encoding="utf-8")
+    assert "s3cr3t-PW" not in raw
+    rec = json.loads(raw.splitlines()[0])
+    assert rec["results"][0]["value"] == "<redacted 9 chars>"
+    assert rec["results"][0]["pattern"] == "value" and rec["ok"] is True
+
+
+def test_telemetry_keeps_result_text(tmp_path, monkeypatch):
+    """Only `args` is redacted: resolved UI labels in the result stay useful."""
+    monkeypatch.setattr(telemetry, "_DISABLED", False)
+    telemetry.configure(tmp_path)
+    telemetry.record("click", args={"target": "Save"}, resolved={"text": "Save"})
+    rec = telemetry.tail(1)[0]
+    assert rec["resolved"]["text"] == "Save" and rec["args"]["target"] == "Save"

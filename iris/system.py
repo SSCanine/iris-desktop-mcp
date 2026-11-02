@@ -467,6 +467,11 @@ def _reg_type_name(t: int) -> str:
     return _REG_TYPES.get(int(t), f"REG_TYPE_{t}")
 
 
+_WRITABLE_TYPES = frozenset(
+    {"REG_SZ", "REG_EXPAND_SZ", "REG_DWORD", "REG_QWORD", "REG_MULTI_SZ", "REG_BINARY"}
+)
+
+
 def registry_write(
     hive: str,
     key_path: str,
@@ -492,7 +497,14 @@ def registry_write(
     h = _hive_const(hive)
     if h is None:
         return {"ok": False, "reason": "unknown_hive"}
-    type_const = getattr(winreg, value_type, None)
+    # Allowlist: getattr(winreg, <caller string>) alone would accept ANY
+    # winreg attribute (HKEY_*, KEY_*, REG_LINK, REG_RESOURCE_LIST...) and
+    # pass its integer value to SetValueEx as a value type.
+    type_const = (
+        getattr(winreg, value_type, None)
+        if isinstance(value_type, str) and value_type in _WRITABLE_TYPES
+        else None
+    )
     if type_const is None:
         return {
             "ok": False,

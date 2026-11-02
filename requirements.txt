@@ -1,6 +1,9 @@
-mcp>=1.10,<2  # 2.x renamed FastMCP -> MCPServer; Iris uses the 1.x API
+mcp>=1.30.0,<2  # 2.x renamed FastMCP -> MCPServer; Iris uses the 1.x API
 mss>=9.0.0
-pillow>=10.0.0
+# Floors are the first releases without known advisories (pip-audit, 2026-11).
+# Pillow 13 needs Python 3.11, so 3.10 keeps the 12.2 floor.
+pillow>=12.2.0; python_version < '3.11'
+pillow>=13.0.0; python_version >= '3.11'
 pyautogui>=0.9.54
 pywin32>=306; sys_platform == 'win32'
 uiautomation>=2.0.18; sys_platform == 'win32'
@@ -11,8 +14,8 @@ platformdirs>=4.0.0
 # Pixel backend (color / template targets). numpy is required for color search;
 # opencv is required for image: templates and speeds up color search.
 numpy>=1.24
-opencv-python-headless>=4.8
+opencv-python-headless>=4.8.1.78
 
 # Dev / test
-pytest>=7.4.0
+pytest>=9.0.3
 pytest-asyncio>=0.21.0

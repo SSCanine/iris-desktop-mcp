@@ -44,6 +44,10 @@ except ImportError:
 
 RECIPES_DIR = Path(__file__).resolve().parent.parent / "recipes"
 
+# Recipe names are file stems like "obs.start_recording": letters, digits,
+# dot, underscore, hyphen. No path separators, no drive letters.
+_SAFE_NAME = re.compile(r"[A-Za-z0-9_.\-]{1,100}")
+
 
 # Populated lazily by server.py via register_action()
 _ACTION_REGISTRY: dict[str, Callable] = {}
@@ -130,7 +134,14 @@ def load_recipe(name: str) -> dict:
         raise RuntimeError("pyyaml not installed; cannot run recipes")
     if not RECIPES_DIR.exists():
         raise FileNotFoundError(f"recipes dir missing: {RECIPES_DIR}")
+    # `name` comes from the caller (an LLM). It must stay a bare recipe name:
+    # "../x", "C:/x" or "\\\\host\\share\\x" would otherwise load and RUN any
+    # .yaml on disk, including steps that pass confirm=True / force=True.
+    if not _SAFE_NAME.fullmatch(str(name)) or ".." in str(name):
+        raise ValueError(f"invalid recipe name: {name!r}")
     direct = RECIPES_DIR / f"{name}.yaml"
+    if direct.resolve().parent != RECIPES_DIR.resolve():
+        raise ValueError(f"invalid recipe name: {name!r}")
     if direct.exists():
         return yaml.safe_load(direct.read_text(encoding="utf-8")) or {}
     for p in RECIPES_DIR.glob("*.yaml"):

@@ -69,10 +69,49 @@ def _compact(value: Any, depth: int = 0) -> Any:
     return repr(value)[:120]
 
 
+# Argument keys whose values are user CONTENT rather than UI targets: what a
+# do() "type" step types and what a "set" step enters. They can be passwords
+# or other secrets, and events.jsonl is plain text that events_tail() hands
+# back to the agent, so only their length is kept.
+_REDACT_KEYS = frozenset({"text", "value"})
+
+# Result keys redacted the same way. A "set" step echoes what it entered back
+# as {"pattern": "value", "value": <the text>}, and do() passes that through,
+# so results need it too. "text" stays: in results it is a resolved UI label.
+_RESULT_REDACT_KEYS = frozenset({"value"})
+
+
+def redact(value: Any, keys: frozenset = _REDACT_KEYS) -> Any:
+    """Replace the values of `keys` anywhere in a nested tree."""
+    if isinstance(value, dict):
+        return {
+            k: (
+                f"<redacted {len(str(v))} chars>"
+                if k in keys and v is not None
+                else redact(v, keys)
+            )
+            for k, v in value.items()
+        }
+    if isinstance(value, (list, tuple)):
+        return [redact(v, keys) for v in value]
+    return value
+
+
 def record(kind: str, **fields: Any) -> None:
-    """Append one event. Never raises."""
+    """Append one event. Never raises. Tool arguments (`args`) are redacted, and so is
+    any `value` key in the result fields (what a set step entered)."""
     if _DISABLED:
         return
+    if "args" in fields:
+        try:
+            fields["args"] = redact(fields["args"])
+        except Exception:
+            fields["args"] = "<unloggable>"
+    for k in [k for k in fields if k != "args"]:
+        try:
+            fields[k] = redact(fields[k], _RESULT_REDACT_KEYS)
+        except Exception:
+            fields[k] = "<unloggable>"
     rec = {"ts": round(time.time(), 3), "kind": kind}
     rec.update({k: _compact(v) for k, v in fields.items()})
     try:

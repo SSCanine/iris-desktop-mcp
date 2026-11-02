@@ -206,3 +206,82 @@ class TestRegistry:
         assert r["ok"] is True
         names = [v["name"] for v in r["values"]]
         assert "Path" in names
+
+
+# ---------------------------------------------------------------------------
+# registry_write value_type allowlist (security review 2026-11). Runs on any
+# OS: a fake winreg records what would have been written.
+# ---------------------------------------------------------------------------
+class _FakeKey:
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc):
+        return False
+
+
+class _FakeWinreg:
+    HKEY_CURRENT_USER = 0x80000001
+    HKEY_LOCAL_MACHINE = 0x80000002
+    KEY_ALL_ACCESS = 0xF003F
+    REG_NONE = 0
+    REG_SZ = 1
+    REG_EXPAND_SZ = 2
+    REG_BINARY = 3
+    REG_DWORD = 4
+    REG_LINK = 6
+    REG_MULTI_SZ = 7
+    REG_RESOURCE_LIST = 8
+    REG_QWORD = 11
+
+    def __init__(self):
+        self.writes = []
+
+    def CreateKey(self, hive, path):
+        return _FakeKey()
+
+    def SetValueEx(self, key, name, reserved, vtype, value):
+        self.writes.append((name, vtype, value))
+
+
+@pytest.fixture
+def fake_winreg(monkeypatch):
+    fake = _FakeWinreg()
+    monkeypatch.setattr(system_mod, "winreg", fake, raising=False)
+    monkeypatch.setattr(system_mod, "HAS_WINREG", True)
+    return fake
+
+
+@pytest.mark.parametrize(
+    "bad_type",
+    [
+        "HKEY_LOCAL_MACHINE",
+        "KEY_ALL_ACCESS",
+        "REG_LINK",
+        "REG_NONE",
+        "REG_RESOURCE_LIST",
+        "CreateKey",
+        "reg_sz",
+        "",
+        None,
+        1,
+    ],
+)
+def test_registry_write_rejects_non_allowlisted_types(fake_winreg, bad_type):
+    r = system_mod.registry_write(
+        "HKCU", "Software\\IrisMCPTest", "v", "x", value_type=bad_type, confirm=True
+    )
+    assert r["ok"] is False
+    assert r["reason"] == "unknown_value_type"
+    assert fake_winreg.writes == []
+
+
+@pytest.mark.parametrize(
+    "good_type", ["REG_SZ", "REG_EXPAND_SZ", "REG_DWORD", "REG_QWORD", "REG_MULTI_SZ", "REG_BINARY"]
+)
+def test_registry_write_accepts_documented_types(fake_winreg, good_type):
+    r = system_mod.registry_write(
+        "HKCU", "Software\\IrisMCPTest", "v", "x", value_type=good_type, confirm=True
+    )
+    assert r["ok"] is True, r
+    assert fake_winreg.writes == [("v", getattr(_FakeWinreg, good_type), "x")]

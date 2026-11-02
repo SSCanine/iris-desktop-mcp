@@ -184,3 +184,53 @@ def test_builtin_recipes_load_cleanly():
     assert "chrome.open_url" in names
     assert "vscode.command_palette" in names
     assert "alt_tab_to" in names
+
+
+# ---------------------------------------------------------------------------
+# Recipe names must not escape RECIPES_DIR (security review 2026-11)
+# ---------------------------------------------------------------------------
+@pytest.mark.parametrize(
+    "bad",
+    [
+        "../evil",
+        "..\\evil",
+        "sub/evil",
+        "sub\\evil",
+        "C:/Users/x/Downloads/evil",
+        "C:\\Users\\x\\Downloads\\evil",
+        "\\\\host\\share\\evil",
+        "/tmp/evil",
+        "..",
+        "",
+    ],
+)
+def test_load_recipe_rejects_paths(bad, tmp_path, monkeypatch):
+    rdir = tmp_path / "recipes"
+    rdir.mkdir()
+    # A planted recipe one level up must never be reachable by name.
+    (tmp_path / "evil.yaml").write_text("name: evil\nsteps: [{action: noop}]\n", encoding="utf-8")
+    monkeypatch.setattr(recipes_mod, "RECIPES_DIR", rdir)
+    with pytest.raises(ValueError):
+        recipes_mod.load_recipe(bad)
+
+
+def test_load_recipe_dotted_name_still_works(tmp_path, monkeypatch):
+    rdir = tmp_path / "recipes"
+    rdir.mkdir()
+    (rdir / "obs.start_recording.yaml").write_text(
+        "name: obs.start_recording\nsteps: [{action: noop}]\n", encoding="utf-8"
+    )
+    monkeypatch.setattr(recipes_mod, "RECIPES_DIR", rdir)
+    assert recipes_mod.load_recipe("obs.start_recording")["name"] == "obs.start_recording"
+
+
+def test_run_recipe_traversal_never_executes(tmp_path, monkeypatch):
+    rdir = tmp_path / "recipes"
+    rdir.mkdir()
+    (tmp_path / "evil.yaml").write_text("name: evil\nsteps: [{action: boom}]\n", encoding="utf-8")
+    monkeypatch.setattr(recipes_mod, "RECIPES_DIR", rdir)
+    called = []
+    recipes_mod.register_action("boom", lambda **kw: called.append(kw) or {"ok": True})
+    with pytest.raises(ValueError):
+        recipes_mod.run_recipe("../evil")
+    assert called == []

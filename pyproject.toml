@@ -44,9 +44,12 @@ classifiers = [
 dependencies = [
     # mcp 2.x removed mcp.server.fastmcp (renamed to MCPServer with API changes).
     # Iris targets the 1.x FastMCP API; pin until the port is done and tested.
-    "mcp>=1.10,<2",
+    "mcp>=1.30.0,<2",
     "mss>=9.0.0",
-    "pillow>=10.0.0",
+    # Floors are the first releases without known advisories (pip-audit,
+    # 2026-11). Pillow 13 needs Python 3.11, so 3.10 keeps the 12.2 floor.
+    "pillow>=12.2.0; python_version < '3.11'",
+    "pillow>=13.0.0; python_version >= '3.11'",
     "pyautogui>=0.9.54",
     "pywin32>=306; sys_platform == 'win32'",
     "uiautomation>=2.0.18; sys_platform == 'win32'",
@@ -55,7 +58,7 @@ dependencies = [
     "psutil>=5.9.0",
     "platformdirs>=4.0.0",
     "numpy>=1.24",
-    "opencv-python-headless>=4.8",
+    "opencv-python-headless>=4.8.1.78",
 ]
 
 [project.optional-dependencies]
@@ -64,7 +67,7 @@ dependencies = [
 notifications = ["winsdk>=1.0.0b10; sys_platform == 'win32'"]
 # Dev / test / lint stack.
 dev = [
-    "pytest>=7.4.0",
+    "pytest>=9.0.3",
     "pytest-asyncio>=0.21.0",
     "ruff>=0.5.0",
 ]
